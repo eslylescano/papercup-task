@@ -1,7 +1,15 @@
 import express from 'express';
-import exampleRouter from './routes/example';
+import bodyParser from 'body-parser';
+import videoRoutes from './routes/videoRoutes';
+import annotationRoutes from './routes/annotationRoutes';
 
-export const app = express();
 
-app.use(express.json());
-app.use('/example', exampleRouter);
+const app = express();
+
+app.use(bodyParser.json());
+
+app.use('/videos', videoRoutes);
+app.use('/annotations', annotationRoutes);
+
+
+export default app;
