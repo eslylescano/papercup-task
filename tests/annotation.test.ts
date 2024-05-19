@@ -5,6 +5,7 @@ describe('Annotation API', () => {
   it('should create a new annotation', async () => {
     const res = await request(app)
       .post('/annotations')
+      .set('x-api-key', '123456')
       .send({
         videoId: 1,
         startTime: 60,
@@ -19,7 +20,7 @@ describe('Annotation API', () => {
   });
 
   it('should get annotations for a video', async () => {
-    const res = await request(app).get('/annotations/video/1');
+    const res = await request(app).get('/annotations/video/1').set('x-api-key', '123456');
     expect(res.status).toBe(200);
     expect(res.body).toBeInstanceOf(Array);
   });
@@ -27,6 +28,7 @@ describe('Annotation API', () => {
   it('should update an annotation', async () => {
     const res = await request(app)
       .put('/annotations/1')
+      .set('x-api-key', '123456')
       .send({
         startTime: 160,
         endTime: 210,
@@ -39,7 +41,7 @@ describe('Annotation API', () => {
   });
 
   it('should delete an annotation by ID', async () => {
-    const res = await request(app).delete('/annotations/1');
+    const res = await request(app).delete('/annotations/1').set('x-api-key', '123456');
     expect(res.status).toBe(204);
   });
 });
