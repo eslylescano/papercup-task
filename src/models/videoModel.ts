@@ -21,12 +21,19 @@ export async function getVideos(): Promise<Video[]> {
   return db.all('SELECT * FROM videos');
 }
 
-export async function getVideoById(id: number): Promise<Video | undefined> {
+export async function getVideoById(id: number): Promise<Video> {
   const db = await sequelize;
-  return db.get('SELECT * FROM videos WHERE id = ?', [id]);
+  const video = await db.get('SELECT * FROM videos WHERE id = ?', [id]);
+  if (!video) {
+    throw new Error(`Video with id ${id} not found`);
+  }
+  return video;
 }
 
 export async function deleteVideo(id: number): Promise<void> {
   const db = await sequelize;
-  await db.run('DELETE FROM videos WHERE id = ?', [id]);
+  const result = await db.run('DELETE FROM videos WHERE id = ?', [id]);
+  if (result.changes === 0) {
+    throw new Error(`Video with id ${id} not found`);
+  }
 }
