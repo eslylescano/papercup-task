@@ -1,22 +1,25 @@
 import { Router } from 'express';
+import { createAnnotation, getAnnotationsByVideoId, updateAnnotation, deleteAnnotation } from '../models/annotationModel';
 
 const router = Router();
 
-router.post('/', (req, res) => {
-  const newAnnotation = { id: 1, ...req.body };
-  res.status(201).json(newAnnotation);
+router.post('/', async (req, res) => {
+  const annotation = await createAnnotation(req.body);
+  res.status(201).json(annotation);
 });
 
-router.get('/video/:videoId', (req, res) => {
-  res.status(200).json([{ id: 1, videoId: 1, startTime: 60, endTime: 120, type: 'Advertisement', notes: 'Test annotation notes' }]);
+router.get('/video/:videoId', async (req, res) => {
+  const annotations = await getAnnotationsByVideoId(parseInt(req.params.videoId, 10));
+  res.status(200).json(annotations);
 });
 
-router.put('/:id', (req, res) => {
-  const updatedAnnotation = { id: 1, ...req.body };
-  res.status(200).json(updatedAnnotation);
+router.put('/:id', async (req, res) => {
+  await updateAnnotation(parseInt(req.params.id, 10), req.body);
+  res.status(200).json(req.body);
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
+  await deleteAnnotation(parseInt(req.params.id, 10));
   res.status(204).send();
 });
 
